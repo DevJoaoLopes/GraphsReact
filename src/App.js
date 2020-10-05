@@ -27,12 +27,13 @@ export default function App() {
 
   const handleCaminho = () => {
     let aux = [];
+    //verifica caminho direto
     grafo.forEach(element => {
       if(element.name === caminho1){
         element.go.forEach(g => {
-          //verifica caminho direto
           if(g === caminho2){
-           return setExisteCaminho('existe caminho!');
+            setExisteCaminho('existe');
+            // return alert("Existe caminho"); 
           }else{
             aux.push(g);
           }
@@ -44,13 +45,15 @@ export default function App() {
     //nao encontrou caminho diretamente
     //verifica caminho indireto
     grafo.forEach(element => {
-      if(element.name !== caminho1){
+      if(element.name !== caminho1 && existeCaminho !== 'existe'){
         element.go.forEach(g => {
           aux.forEach(a => {
-            if(g === caminho2 && g === a){
-              return setExisteCaminho('existe caminho!');
+            if(g === caminho2 && element.name === a){
+              console.log('existe');
+              setExisteCaminho('existe');
             }else{
-              setExisteCaminho('nao existe caminho!');
+              aux.push(g);
+              setExisteCaminho('nao existe');
             }
           });
         });
