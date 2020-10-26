@@ -8,6 +8,8 @@ export default function App() {
   const [caminho1, setCaminho1] = React.useState('');
   const [caminho2, setCaminho2] = React.useState('');
   const [existeCaminho, setExisteCaminho] = React.useState('');
+  const [ciclo, setCiclo] = React.useState('');
+  const [existeCiclo, setExisteCiclo] = React.useState('');
   const [grafo, setGrafo] = React.useState([]);
 
   const add = () => {
@@ -34,6 +36,7 @@ export default function App() {
         element.go.forEach(g => {
           if(g === caminho2){
             setExisteCaminho('existe');
+            existe = true;
             // return alert("Existe caminho"); 
           }else{
             aux.push(g);
@@ -67,6 +70,42 @@ export default function App() {
         }else setExisteCaminho('nao existe');
       }
     });
+  }
+
+  const handleCiclo = () => {
+    let aux = [];
+    grafo.forEach(element => {
+      if(element.name === ciclo){
+        element.go.forEach(g => {
+          aux.push(g);
+        });
+      }
+    });
+
+    while (aux.length > 0) {
+      console.log(aux);
+      grafo.forEach(element => {
+        if(element.name !== ciclo){
+          aux.forEach(a => {
+            if(element.name === a){
+              element.go.forEach(g => {
+                if(g === ciclo){
+                  aux = [];
+                  setExisteCiclo('existe');
+                  console.log('existe ciclo');
+                }else{
+                  aux.splice(0,1); //remove ultimo do array
+                  aux.push(g);
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+
+
+
   }
   
   console.log(grafo);
@@ -126,6 +165,21 @@ export default function App() {
       </button>
       <br />
       <label>{existeCaminho}</label>
+      <br />
+      <br />
+      <br />
+      <form>
+      <label>
+        Verificar ciclo
+        <br />
+        <input type="text" value={ciclo} onChange={(ev) => setCiclo(ev.target.value)} />
+      </label>
+      </form>
+      <button onClick={handleCiclo}>
+        Verificar   
+      </button>
+      <br />
+      <label>{existeCiclo}</label>
       <br />
       <div>
       {grafo.map((e) =>
