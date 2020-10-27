@@ -11,6 +11,7 @@ export default function App() {
   const [ciclo, setCiclo] = React.useState('');
   const [existeCiclo, setExisteCiclo] = React.useState('');
   const [grafo, setGrafo] = React.useState([]);
+  const [euleriano, setEuleriano] = React.useState('');
 
   const add = () => {
     setGrafo([...grafo, {name: name, go: []}]);
@@ -21,7 +22,7 @@ export default function App() {
     let array = grafo.slice();
     grafo.forEach((element, i) => {
       if(element.name === origem){
-        array[i].go.push(destino); 
+        array[i].go.push(destino);
       }
     });
     setGrafo([...array]);
@@ -37,21 +38,18 @@ export default function App() {
           if(g === caminho2){
             setExisteCaminho('existe');
             existe = true;
-            // return alert("Existe caminho"); 
           }else{
             aux.push(g);
           }
         });
       }
     });
-    
 
     //nao encontrou caminho diretamente
     //verifica caminho indireto
     grafo.forEach(element => {
       console.log(aux);
       if(element.name !== caminho1 && existe === false){
-        console.log('teste');
         if(element.go.length > 0){
           element.go.forEach(g => {
             aux.forEach(a => {
@@ -74,38 +72,82 @@ export default function App() {
 
   const handleCiclo = () => {
     let aux = [];
+    let existe = false;
+    //verifica caminho direto
     grafo.forEach(element => {
       if(element.name === ciclo){
         element.go.forEach(g => {
-          aux.push(g);
+          if(g === ciclo){
+            setExisteCiclo('existe');
+            existe = true;
+          }else{
+            aux.push(g);
+          }
         });
       }
     });
-
-    while (aux.length > 0) {
+    
+    //nao encontrou caminho diretamente
+    //verifica caminho indireto
+    grafo.forEach(element => {
       console.log(aux);
-      grafo.forEach(element => {
-        if(element.name !== ciclo){
-          aux.forEach(a => {
-            if(element.name === a){
-              element.go.forEach(g => {
-                if(g === ciclo){
-                  aux = [];
-                  setExisteCiclo('existe');
-                  console.log('existe ciclo');
-                }else{
-                  aux.splice(0,1); //remove ultimo do array
-                  aux.push(g);
-                }
-              });
-            }
+      if(element.name !== ciclo && existe === false){
+        if(element.go.length > 0){
+          element.go.forEach(g => {
+            aux.forEach(a => {
+              if(g === ciclo && element.name === a){
+                console.log('existe');
+                existe = true;
+                setExisteCiclo('existe');
+                console.log(existe);
+              }else if(existe === false){
+                console.log('nao');
+                aux.push(g);
+                setExisteCiclo('nao existe');
+              }
+            });
           });
-        }
+        }else setExisteCiclo('nao existe');
+      }
+    });
+  }
+
+  const onEuleriano = () => {
+    let par = true;
+    grafo.forEach(element => {
+      if(element.go.length % 2 !== 0){
+        par = false;
+        setEuleriano('nao euleriano');
+      }
+    });
+    if(par){
+      // setEuleriano('eh euleriano');
+
+      grafo.forEach(item => {
+        let aux = [];
+        let existe = false;
+        
+        grafo.forEach(element => {
+          console.log(aux);
+          if(element.name !== item.name && existe === false){
+            if(element.go.length > 0){
+              element.go.forEach(g => {
+                aux.forEach(a => {
+                  if(g === item.name && element.name === a){
+                    existe = true;
+                    setEuleriano('eh euleriano');
+                    console.log(existe);
+                  }else if(existe === false){
+                    aux.push(g);
+                    setEuleriano('nao euleriano');
+                  }
+                });
+              });
+            }else setEuleriano('nao euleriano');
+          }
+        });
       });
     }
-
-
-
   }
   
   console.log(grafo);
@@ -179,7 +221,15 @@ export default function App() {
         Verificar   
       </button>
       <br />
+      <br />
+      <br />
+      <br />
       <label>{existeCiclo}</label>
+      <button onClick={onEuleriano}>
+        Euleriano 
+      </button>
+      <br />
+      <label>{euleriano}</label>
       <br />
       <div>
       {grafo.map((e) =>
