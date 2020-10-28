@@ -48,18 +48,14 @@ export default function App() {
     //nao encontrou caminho diretamente
     //verifica caminho indireto
     grafo.forEach(element => {
-      console.log(aux);
       if(element.name !== caminho1 && existe === false){
         if(element.go.length > 0){
           element.go.forEach(g => {
             aux.forEach(a => {
               if(g === caminho2 && element.name === a){
-                console.log('existe');
                 existe = true;
                 setExisteCaminho('existe');
-                console.log(existe);
               }else if(existe === false){
-                console.log('nao');
                 aux.push(g);
                 setExisteCaminho('nao existe');
               }
@@ -90,18 +86,14 @@ export default function App() {
     //nao encontrou caminho diretamente
     //verifica caminho indireto
     grafo.forEach(element => {
-      console.log(aux);
       if(element.name !== ciclo && existe === false){
         if(element.go.length > 0){
           element.go.forEach(g => {
             aux.forEach(a => {
               if(g === ciclo && element.name === a){
-                console.log('existe');
                 existe = true;
                 setExisteCiclo('existe');
-                console.log(existe);
               }else if(existe === false){
-                console.log('nao');
                 aux.push(g);
                 setExisteCiclo('nao existe');
               }
@@ -121,22 +113,26 @@ export default function App() {
       }
     });
     if(par){
-      // setEuleriano('eh euleriano');
-
+      let existe = false;
       grafo.forEach(item => {
         let aux = [];
-        let existe = false;
-        
+        let e = item.name;
+
         grafo.forEach(element => {
-          console.log(aux);
-          if(element.name !== item.name && existe === false){
+          if(element.name === e){
+            element.go.forEach(g => {
+              aux.push(g);
+            });
+          }
+        });
+        grafo.forEach(element => {
+          if(existe === false){
             if(element.go.length > 0){
               element.go.forEach(g => {
                 aux.forEach(a => {
-                  if(g === item.name && element.name === a){
+                  if(g === e && element.name === a){
                     existe = true;
                     setEuleriano('eh euleriano');
-                    console.log(existe);
                   }else if(existe === false){
                     aux.push(g);
                     setEuleriano('nao euleriano');
@@ -221,10 +217,9 @@ export default function App() {
         Verificar   
       </button>
       <br />
-      <br />
-      <br />
-      <br />
       <label>{existeCiclo}</label>
+      <br />
+      <br />
       <button onClick={onEuleriano}>
         Euleriano 
       </button>
