@@ -12,6 +12,9 @@ export default function App() {
   const [existeCiclo, setExisteCiclo] = React.useState('');
   const [grafo, setGrafo] = React.useState([]);
   const [euleriano, setEuleriano] = React.useState('');
+  const [largura, setLargura] = React.useState('');
+  const [arrayLarg, setArrayLarg] = React.useState([]);
+  const [profundidade, setProfundidade] = React.useState('');
 
   const add = () => {
     setGrafo([...grafo, {name: name, go: []}]);
@@ -145,6 +148,23 @@ export default function App() {
       });
     }
   }
+
+  const onLargura = () => {
+    let aux = [];
+    aux.push(grafo[0].name);
+    grafo.forEach(element => {
+      element.go.forEach(g => {
+        if(aux.length > 0){
+            if(!aux.includes(g)){
+              aux.push(g);
+              console.log(aux, element.name);
+              setArrayLarg(aux)
+            }
+          }
+      });
+    });
+  }
+
   
   console.log(grafo);
 
@@ -225,6 +245,24 @@ export default function App() {
       </button>
       <br />
       <label>{euleriano}</label>
+      <br />
+      <br />
+      <button onClick={onLargura}>
+        Busca em Largura 
+      </button>
+      <br />
+      {arrayLarg.map((e) => 
+        <>
+            <label>{`${e} - `}</label>
+        </>
+      )}
+      <br />
+      <br />
+      <button onClick={() => {}}>
+        Busca em Profundidade 
+      </button>
+      <br />
+      <label>{profundidade}</label>
       <br />
       <div>
       {grafo.map((e) =>
