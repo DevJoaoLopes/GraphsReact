@@ -12,9 +12,8 @@ export default function App() {
   const [existeCiclo, setExisteCiclo] = React.useState('');
   const [grafo, setGrafo] = React.useState([]);
   const [euleriano, setEuleriano] = React.useState('');
-  const [largura, setLargura] = React.useState('');
   const [arrayLarg, setArrayLarg] = React.useState([]);
-  const [profundidade, setProfundidade] = React.useState('');
+  const [arrayProf, setArrayProf] = React.useState([]);
 
   const add = () => {
     setGrafo([...grafo, {name: name, go: []}]);
@@ -166,6 +165,29 @@ export default function App() {
   }
 
   
+  const onProfundidade = () => {
+    let aux = [];
+    aux.push(grafo[0].name);
+    for (let index = 0; index < grafo.length; index++) {
+      if(grafo[index].go.length > 1){
+        aux.push(grafo[index].go[0]);
+        if(!aux.includes(grafo[index].name)){
+          aux.push(grafo[index].name);
+        }
+      }else{
+        if(grafo[index].go.length != 0){
+          aux.push(grafo[index].go[0]);
+        }else{
+          if(!aux.includes(grafo[index].name)){
+            aux.push(grafo[index].name);
+          }
+        }
+     }
+    }
+    setArrayProf(aux);
+  }
+
+  
   console.log(grafo);
 
   return (
@@ -258,11 +280,15 @@ export default function App() {
       )}
       <br />
       <br />
-      <button onClick={() => {}}>
+      <button onClick={onProfundidade}>
         Busca em Profundidade 
       </button>
       <br />
-      <label>{profundidade}</label>
+      {arrayProf.map((e) => 
+        <>
+            <label>{`${e} - `}</label>
+        </>
+      )}
       <br />
       <div>
       {grafo.map((e) =>
